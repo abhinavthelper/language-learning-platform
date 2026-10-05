@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Lessons</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background: #eef2f7;
+      }
+    </style>
+  </head>
+  <body style="font-family: Arial; margin: 30px">
+    <h1>Lesson Management</h1>
+    <a th:href="@{/instructor/lessons/new}">+ Create new lesson</a>
+    <br /><br />
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Language</th>
+        <th>Difficulty</th>
+        <th>Status</th>
+      </tr>
+      <tr th:each="l : ${lessons}">
+        <td th:text="${l.title}"></td>
+        <td th:text="${l.language}"></td>
+        <td th:text="${l.difficulty}"></td>
+        <td><b th:text="${l.status}"></b></td>
+      </tr>
+    </table>
+  </body>
+</html>

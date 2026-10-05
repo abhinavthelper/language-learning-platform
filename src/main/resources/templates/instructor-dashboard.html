@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Instructor Dashboard</title>
-</head>
-<body style="font-family: Arial; margin: 30px;">
+  </head>
+  <body style="font-family: Arial; margin: 30px">
     <h1>Instructor Dashboard</h1>
     <p>Welcome, <b th:text="${user.name}"></b></p>
     <ul>
-        <li>Lesson Management (coming soon)</li>
-        <li>Feedback Management (coming soon)</li>
-        <li>Learner Progress (coming soon)</li>
-        <li>Lesson Analytics (coming soon)</li>
+      <li><a th:href="@{/instructor/lessons}">Lesson Management</a></li>
+      <li>Feedback Management (coming soon)</li>
+      <li>Learner Progress (coming soon)</li>
+      <li>Lesson Analytics (coming soon)</li>
     </ul>
     <a th:href="@{/logout}">Logout</a>
-</body>
+  </body>
 </html>
