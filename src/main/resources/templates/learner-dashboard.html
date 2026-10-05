@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Learner Dashboard</title>
+</head>
+<body style="font-family: Arial; margin: 30px;">
+    <h1>Learner Dashboard</h1>
+    <p>Welcome, <b th:text="${user.name}"></b></p>
+    <ul>
+        <li>Lesson Participation (coming soon)</li>
+        <li>Progress Tracking (coming soon)</li>
+        <li>Interactions (coming soon)</li>
+        <li>Profile Management (coming soon)</li>
+    </ul>
+    <a th:href="@{/logout}">Logout</a>
+</body>
+</html>

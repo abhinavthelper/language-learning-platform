@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body style="font-family: Arial; margin: 30px;">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, <b th:text="${user.name}"></b></p>
+    <ul>
+        <li>User Management (coming soon)</li>
+        <li>Content Management (coming soon)</li>
+        <li>System Settings (coming soon)</li>
+        <li>Activity Monitoring (coming soon)</li>
+    </ul>
+    <a th:href="@{/logout}">Logout</a>
+</body>
+</html>
