@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Lessons</title>
+</head>
+<body style="font-family: Arial; margin: 30px;">
+    <h1>Available Lessons</h1>
+    <ul>
+        <li th:each="l : ${lessons}">
+            <a th:href="@{/learner/lessons/{id}(id=${l.id})}" th:text="${l.title}"></a>
+            - <span th:text="${l.language}"></span> (<span th:text="${l.difficulty}"></span>)
+        </li>
+    </ul>
+</body>
+</html>
