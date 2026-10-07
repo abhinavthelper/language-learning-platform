@@ -31,7 +31,11 @@
                     <form th:if="${l.status == 'PENDING'}" th:action="@{/admin/content/approve/{id}(id=${l.id})}" method="post" style="display:inline;">
                         <button type="submit">Approve</button>
                     </form>
+                    <form th:if="${l.status == 'PENDING'}" th:action="@{/admin/content/reject/{id}(id=${l.id})}" method="post" style="display:inline;">
+                        <button type="submit">Reject</button>
+                    </form>
                     <span th:if="${l.status == 'APPROVED'}">Approved</span>
+                    <span th:if="${l.status == 'REJECTED'}">Rejected</span>
                 </td>
             </tr>
         </tbody>

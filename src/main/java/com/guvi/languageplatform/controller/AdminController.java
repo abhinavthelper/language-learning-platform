@@ -75,6 +75,22 @@ public class AdminController {
         return "redirect:/admin/content";
     }
 
+    @PostMapping("/admin/content/reject/{id}")
+    public String rejectContent(@PathVariable Long id, HttpSession session) {
+        User user = (User) session.getAttribute("loggedUser");
+
+        if (user == null || !user.getRole().equals("ADMIN")) {
+            return "redirect:/login";
+        }
+
+        Lesson lesson = lessonRepository.findById(id).orElse(null);
+        if (lesson != null) {
+            lesson.setStatus("REJECTED");
+            lessonRepository.save(lesson);
+        }
+
+        return "redirect:/admin/content";
+    }
     @GetMapping("/admin/settings")
     public String settings(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedUser");
