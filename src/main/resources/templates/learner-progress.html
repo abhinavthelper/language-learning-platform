@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Progress')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Learner')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/learner/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">My Progress</h1>
+        <p class="page-sub">Your quiz results across all lessons.</p>
+
+        <div class="grid" style="margin-bottom:28px;">
+            <div class="card"><h3 style="font-size:1.8rem;" th:text="${total}">0</h3><p>Quiz attempts</p></div>
+            <div class="card"><h3 style="font-size:1.8rem;" th:text="${correct}">0</h3><p>Correct answers</p></div>
+            <div class="card"><h3 style="font-size:1.8rem;" th:text="${percent} + '%'">0%</h3><p>Accuracy</p></div>
+        </div>
+
+        <div class="card" style="margin-bottom:28px;">
+            <h3>Accuracy by lesson</h3>
+            <p th:if="${#lists.isEmpty(stats)}" style="margin-top:8px;">No quiz attempts yet. Take a lesson quiz to see your progress here.</p>
+            <div th:each="s : ${stats}" style="margin-top:18px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem;">
+                    <b th:text="${s.title}"></b>
+                    <span th:text="${s.correct} + ' / ' + ${s.attempts} + ' correct (' + ${s.percent} + '%)'"></span>
+                </div>
+                <div style="background:var(--accent-soft); border-radius:999px; height:12px; margin-top:6px;">
+                    <div th:style="'width:' + ${s.percent} + '%; background:var(--accent); height:12px; border-radius:999px;'"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Feedback from instructors</h3>
+            <p th:if="${#lists.isEmpty(feedbackList)}" style="margin-top:8px;">No feedback yet.</p>
+            <div th:each="f : ${feedbackList}" style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border);">
+                <p style="color:var(--text);" th:text="${f.message}"></p>
+                <p style="font-size:0.8rem; margin-top:4px;" th:text="${f.instructorEmail} + ' · ' + ${#temporals.format(f.createdAt, 'dd MMM yyyy HH:mm')}"></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

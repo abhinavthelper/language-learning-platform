@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Forum')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Learner')}"></nav>
+    <div class="container" style="max-width:760px;">
+        <a class="back" th:href="@{/learner/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">Learner Forum</h1>
+        <p class="page-sub">Share tips and questions with other learners.</p>
+
+        <div class="error-box" th:if="${error}" th:text="${error}"></div>
+        <div th:if="${success}" style="background:rgba(47,158,107,0.15); color:var(--success); padding:10px 14px; border-radius:10px; margin-bottom:16px;" th:text="${success}"></div>
+
+        <div class="card" style="margin-bottom:24px;">
+            <form th:action="@{/learner/forum}" method="post">
+                <div class="field"><textarea name="message" rows="3" placeholder="Write a message..." required></textarea></div>
+                <button class="btn" type="submit">Post</button>
+            </form>
+        </div>
+
+        <p th:if="${#lists.isEmpty(posts)}">No posts yet. Be the first to write one.</p>
+        <div class="card" th:each="p : ${posts}" style="margin-bottom:14px;">
+            <p style="color:var(--text);" th:text="${p.message}"></p>
+            <p style="font-size:0.8rem; margin-top:8px;" th:text="${p.authorName} + ' · ' + ${#temporals.format(p.postedAt, 'dd MMM yyyy HH:mm')}"></p>
+        </div>
+    </div>
+</body>
+</html>
