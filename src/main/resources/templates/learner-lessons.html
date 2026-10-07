@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Available Lessons</title>
-</head>
-<body style="font-family: Arial; margin: 30px;">
-    <h1>Available Lessons</h1>
-    <ul>
-        <li th:each="l : ${lessons}">
-            <a th:href="@{/learner/lessons/{id}(id=${l.id})}" th:text="${l.title}"></a>
-            - <span th:text="${l.language}"></span> (<span th:text="${l.difficulty}"></span>)
-        </li>
-    </ul>
+<head th:replace="~{fragments/layout :: head('Available Lessons')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Learner')}"></nav>
+    <div class="container">
+        <a th:href="@{/learner/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title" style="margin-top:16px;">Available Lessons</h1>
+        <p class="page-sub">Choose a lesson and test yourself with the quiz.</p>
+
+        <div class="grid">
+            <a class="card" th:each="l : ${lessons}" th:href="@{/learner/lessons/{id}(id=${l.id})}">
+                <div style="display:flex; gap:8px; margin-bottom:14px;">
+                    <span class="tag" th:text="${l.language}"></span>
+                    <span class="tag" th:text="${l.difficulty}"></span>
+                </div>
+                <h3 th:text="${l.title}"></h3>
+                <p>Start lesson →</p>
+            </a>
+        </div>
+    </div>
 </body>
 </html>

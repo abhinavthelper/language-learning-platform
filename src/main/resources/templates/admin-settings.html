@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>System Settings</title>
-</head>
-<body style="font-family: Arial; margin: 30px;">
-    <h1>System Settings</h1>
-    
-    <div style="margin-top: 20px; padding: 20px; border: 1px solid #ccc; max-width: 500px;">
-        <p><strong>Platform Name:</strong> Language Learning Platform</p>
-        <p><strong>Version:</strong> 1.0.0</p>
-        <p><strong>Status:</strong> Active</p>
-        <hr>
-        <p><i>More configuration options will be available soon.</i></p>
+<head th:replace="~{fragments/layout :: head('System Settings')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Admin')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/admin/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">System Settings</h1>
+        <p class="page-sub">Platform information and configuration.</p>
+
+        <div class="card form-card">
+            <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--muted);">Platform name</span>
+                <b>Language Learning Platform</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border);">
+                <span style="color:var(--muted);">Version</span>
+                <b>1.0.0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:12px 0;">
+                <span style="color:var(--muted);">Status</span>
+                <span class="pill approved">Active</span>
+            </div>
+            <p style="margin-top:16px; color:var(--muted); font-size:0.9rem;">More configuration options will be available soon.</p>
+        </div>
     </div>
-    
-    <br/>
-    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
 </body>
 </html>
