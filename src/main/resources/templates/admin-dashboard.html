@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
-</head>
-<body style="font-family: Arial; margin: 30px;">
-    <h1>Admin Dashboard</h1>
-    <p>Welcome, <b th:text="${user.name}"></b></p>
-    <ul>
-        <li><a th:href="@{/admin/users}">User Management</a></li>
-        <li><a th:href="@{/admin/content}">Content Management</a></li>
-        <li><a th:href="@{/admin/settings}">System Settings</a></li>
-        <li>Activity Monitoring (coming soon)</li>
-    </ul>
-    <a th:href="@{/logout}">Logout</a>
+<head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar(${user.name})}"></nav>
+    <div class="container">
+        <h1 class="page-title">Admin Console</h1>
+        <p class="page-sub">Manage users, content and platform settings.</p>
+        <div class="grid">
+            <a class="card" th:href="@{/admin/users}">
+                <div class="icon">👥</div>
+                <h3>User Management</h3>
+                <p>View all registered users and roles</p>
+            </a>
+            <a class="card" th:href="@{/admin/content}">
+                <div class="icon">🗂️</div>
+                <h3>Content Management</h3>
+                <p>Approve or reject instructor lessons</p>
+            </a>
+            <a class="card" th:href="@{/admin/settings}">
+                <div class="icon">⚙️</div>
+                <h3>System Settings</h3>
+                <p>Platform name, version and status</p>
+            </a>
+            <div class="card disabled">
+                <div class="icon">📡</div>
+                <h3>Activity Monitoring</h3>
+                <p>Coming soon</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

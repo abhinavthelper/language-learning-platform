@@ -29,12 +29,18 @@ public class LoginController {
     @PostMapping("/login")
     public String doLogin(@RequestParam("email") String email,
                           @RequestParam("password") String password,
+                          @RequestParam(value = "role", required = false) String role,
                           HttpSession session, Model model) {
 
         User user = userRepository.findByEmail(email);
 
         if (user == null || !user.getPassword().equals(password)) {
             model.addAttribute("error", "Invalid email or password");
+            return "login";
+        }
+
+        if (role != null && !role.isEmpty() && !user.getRole().equals(role)) {
+            model.addAttribute("error", "This is not a " + role.toLowerCase() + " account. Pick the correct tab.");
             return "login";
         }
 

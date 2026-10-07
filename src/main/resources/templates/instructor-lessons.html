@@ -1,41 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>My Lessons</title>
-    <style>
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background: #eef2f7;
-      }
-    </style>
-  </head>
-  <body style="font-family: Arial; margin: 30px">
-    <h1>Lesson Management</h1>
-    <a th:href="@{/instructor/lessons/new}">+ Create new lesson</a>
-    <br /><br />
-    <table>
-      <tr>
-        <th>Title</th>
-        <th>Language</th>
-        <th>Difficulty</th>
-        <th>Status</th>
-      </tr>
-      <tr th:each="l : ${lessons}">
-        <td th:text="${l.title}"></td>
-        <td th:text="${l.language}"></td>
-        <td th:text="${l.difficulty}"></td>
-        <td><b th:text="${l.status}"></b></td>
-      </tr>
-    </table>
-  </body>
+<head th:replace="~{fragments/layout :: head('My Lessons')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/instructor/dashboard}">← Back to dashboard</a>
+        <div class="row">
+            <div>
+                <h1 class="page-title">My Lessons</h1>
+                <p class="page-sub" style="margin:0;">Lessons go live after admin approval.</p>
+            </div>
+            <a class="btn" th:href="@{/instructor/lessons/new}">+ Create lesson</a>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Title</th><th>Language</th><th>Difficulty</th><th>Status</th></tr>
+                <tr th:each="l : ${lessons}">
+                    <td><b th:text="${l.title}"></b></td>
+                    <td><span class="tag" th:text="${l.language}"></span></td>
+                    <td th:text="${l.difficulty}"></td>
+                    <td><span class="pill" th:classappend="${#strings.toLowerCase(l.status)}" th:text="${l.status}"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
 </html>

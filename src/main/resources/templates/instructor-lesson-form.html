@@ -1,53 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Create Lesson</title>
-    <style>
-      input,
-      textarea,
-      select {
-        width: 100%;
-        padding: 8px;
-        margin: 6px 0 14px;
-        box-sizing: border-box;
-      }
-      button {
-        padding: 10px 20px;
-        background: #2563eb;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body style="font-family: Arial; margin: 30px; max-width: 500px">
-    <h1>Create Lesson</h1>
-    <form th:action="@{/instructor/lessons}" method="post">
-      <label>Title</label>
-      <input type="text" name="title" required />
+<head th:replace="~{fragments/layout :: head('Create Lesson')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/instructor/lessons}">← Back to my lessons</a>
+        <h1 class="page-title">Create Lesson</h1>
+        <p class="page-sub">It will be sent to the admin for approval.</p>
 
-      <label>Language</label>
-      <input type="text" name="language" required />
-
-      <label>Difficulty</label>
-      <select name="difficulty">
-        <option>Beginner</option>
-        <option>Intermediate</option>
-        <option>Advanced</option>
-      </select>
-
-      <label>Content</label>
-      <textarea name="content" rows="5" required></textarea>
-
-      <label>Quiz question</label>
-      <input type="text" name="quizQuestion" required />
-
-      <label>Quiz answer</label>
-      <input type="text" name="quizAnswer" required />
-
-      <button type="submit">Submit for approval</button>
-    </form>
-  </body>
+        <div class="card form-card">
+            <form th:action="@{/instructor/lessons}" method="post">
+                <div class="field"><label>Title</label><input type="text" name="title" required></div>
+                <div class="field"><label>Language</label><input type="text" name="language" required></div>
+                <div class="field"><label>Difficulty</label>
+                    <select name="difficulty">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="field"><label>Content</label><textarea name="content" rows="5" required></textarea></div>
+                <div class="field"><label>Quiz question</label><input type="text" name="quizQuestion" required></div>
+                <div class="field"><label>Quiz answer</label><input type="text" name="quizAnswer" required></div>
+                <button class="btn" type="submit">Submit for approval</button>
+            </form>
+        </div>
+    </div>
+</body>
 </html>

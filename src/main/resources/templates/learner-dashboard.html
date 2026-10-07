@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Learner Dashboard</title>
-</head>
-<body style="font-family: Arial; margin: 30px;">
-    <h1>Learner Dashboard</h1>
-    <p>Welcome, <b th:text="${user.name}"></b></p>
-    <ul>
-        <li><a th:href="@{/learner/lessons}">Lesson Participation</a></li>
-        <li>Progress Tracking (coming soon)</li>
-        <li>Interactions (coming soon)</li>
-        <li>Profile Management (coming soon)</li>
-    </ul>
-    <a th:href="@{/logout}">Logout</a>
+<head th:replace="~{fragments/layout :: head('Learner Dashboard')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar(${user.name})}"></nav>
+    <div class="container">
+        <h1 class="page-title">Welcome back, <span th:text="${user.name}"></span></h1>
+        <p class="page-sub">Pick up where you left off.</p>
+        <div class="grid">
+            <a class="card" th:href="@{/learner/lessons}">
+                <div class="icon">📚</div>
+                <h3>Lessons</h3>
+                <p>Browse approved lessons and take quizzes</p>
+            </a>
+            <div class="card disabled">
+                <div class="icon">📈</div>
+                <h3>Progress</h3>
+                <p>Coming soon</p>
+            </div>
+            <div class="card disabled">
+                <div class="icon">💬</div>
+                <h3>Interactions</h3>
+                <p>Coming soon</p>
+            </div>
+            <div class="card disabled">
+                <div class="icon">👤</div>
+                <h3>Profile</h3>
+                <p>Coming soon</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
