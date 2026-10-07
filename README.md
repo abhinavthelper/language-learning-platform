@@ -22,7 +22,7 @@ Other highlights:
 - Java, Spring Boot 4.1.1 (Spring MVC)
 - Spring Data JPA (Hibernate) and plain JDBC
 - Thymeleaf templates, HTML, CSS, JavaScript
-- H2 database (development)
+- H2 file database (data persists across restarts)
 - Maven (Maven Wrapper included)
 - Git and GitHub (feature branches and pull requests)
 
@@ -38,10 +38,21 @@ src/main/java/com/guvi/languageplatform
 └── servlet/      HttpServlet (/status) and its registration
 src/main/resources
 ├── templates/    Thymeleaf pages (fragments/layout.html is the shared head and navbar)
-└── static/       css/style.css, js/theme.js
+├── static/       css/style.css, js/theme.js
+└── application.properties   Database connection settings
 ```
 
-## Database Design
+## Database Design and Connectivity
+
+The connection is configured in `src/main/resources/application.properties`:
+
+```
+spring.datasource.url=jdbc:h2:file:./data/languageplatform;AUTO_SERVER=TRUE
+spring.datasource.username=sa
+spring.jpa.hibernate.ddl-auto=update
+```
+
+Data is stored in a local file under the `data/` folder (ignored by Git), so it survives server restarts. Tables are created automatically from the JPA entities, and `DataInitializer` adds sample users and lessons on the first startup.
 
 | Table | Purpose |
 |---|---|
@@ -52,7 +63,9 @@ src/main/resources
 | `forum_posts` | Learner discussion messages |
 | `activity_logs` | Records of user actions for admin monitoring |
 
-The tables are created automatically from the JPA entities. `DataInitializer` adds sample users and lessons on startup.
+Two ways of accessing the database are used:
+- **Spring Data JPA** repositories for normal application features
+- **Plain JDBC** (`JdbcStatsDao`) with `Connection`, `PreparedStatement` and `ResultSet`
 
 ## Core Java Concepts Used
 
@@ -62,7 +75,7 @@ The tables are created automatically from the JPA entities. `DataInitializer` ad
 - **Custom exception:** `ResourceNotFoundException`
 - **Collections and Streams:** reports group data using `List`, `Map` and `Collectors.groupingBy`
 - **Synchronization:** `VisitCounter` uses `synchronized` methods
-- **Plain JDBC:** `JdbcStatsDao` uses `Connection`, `PreparedStatement`, `ResultSet`
+- **Plain JDBC:** `JdbcStatsDao`
 - **Servlet:** `StatusServlet` extends `HttpServlet`
 
 ## How to Run
@@ -82,6 +95,8 @@ Stop the server with `Ctrl+C`. If port 8080 is busy, stop the old server first.
 
 Status page: http://localhost:8080/status
 
+The `data/` folder is created automatically on the first run.
+
 ## Demo Accounts
 
 | Role | Email | Password |
@@ -96,17 +111,18 @@ Pick the matching tab on the login page.
 
 | Member | GitHub | Contribution |
 |---|---|---|
-| Abhinav Verma (Team Lead) | abhinavthelper | Project setup, database models, login and role check, UI design and theme, core Java concepts, JDBC, servlet |
+| Abhinav Verma (Team Lead) | abhinavthelper | Project setup, database models and connectivity, login and role check, UI design and theme, core Java concepts, JDBC, servlet |
 | Nishant Kumar | nishantsalar | Instructor module |
 | Abhijay Pandey | abhijaypandeygu-coder | Admin module |
 | Janhvi | janhvibhati019 | Learner module |
 
-Work was split into feature branches (`admin-module`, `instructor-module`, `learner-module`, `ui-redesign`, `phase1-base`) and merged into `main` through pull requests.
+Work was split into feature branches (`admin-module`, `instructor-module`, `learner-module`, `ui-redesign`, `phase1-base`, `db-config`) and merged into `main` through pull requests.
 
 ## Known Limitations and Future Work
 
 - Passwords are stored as plain text (planned: BCrypt hashing with Spring Security)
 - No route protection yet (planned: Spring Security)
-- H2 data resets on restart (planned: MySQL or PostgreSQL)
+- Tables are linked by email, not by foreign keys (planned: proper `@ManyToOne` relations)
+- H2 is a file database for development (planned: MySQL or PostgreSQL)
 - Remaining dashboard features: progress tracking, feedback, forum, profile, analytics, activity monitoring
 - Planned: Google sign-in for learners
