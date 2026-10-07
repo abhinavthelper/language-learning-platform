@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/layout :: head('Admin Dashboard')}"></head>
+
 <body>
     <nav th:replace="~{fragments/layout :: navbar(${user.name})}"></nav>
     <div class="container">
@@ -10,7 +12,7 @@
             <a class="card" th:href="@{/admin/users}">
                 <div class="icon">👥</div>
                 <h3>User Management</h3>
-                <p>View all registered users and roles</p>
+                <p>Add, view and delete users</p>
             </a>
             <a class="card" th:href="@{/admin/content}">
                 <div class="icon">🗂️</div>
@@ -22,12 +24,13 @@
                 <h3>System Settings</h3>
                 <p>Platform name, version and status</p>
             </a>
-            <div class="card disabled">
+            <a class="card" th:href="@{/admin/activity}">
                 <div class="icon">📡</div>
                 <h3>Activity Monitoring</h3>
-                <p>Coming soon</p>
-            </div>
+                <p>Latest logins and quiz attempts</p>
+            </a>
         </div>
     </div>
 </body>
+
 </html>

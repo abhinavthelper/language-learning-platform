@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Activity Monitoring')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Admin')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/admin/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">Activity Monitoring</h1>
+        <p class="page-sub">Latest actions on the platform. This page refreshes itself every 10 seconds.</p>
+
+        <p th:if="${#lists.isEmpty(logs)}">No activity yet.</p>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(logs)}">
+            <table>
+                <tr><th>Time</th><th>User</th><th>Action</th></tr>
+                <tr th:each="l : ${logs}">
+                    <td th:text="${#temporals.format(l.createdAt, 'dd MMM yyyy HH:mm:ss')}"></td>
+                    <td th:text="${l.userEmail}"></td>
+                    <td th:text="${l.action}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        setTimeout(function () { location.reload(); }, 10000);
+    </script>
+</body>
+</html>

@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/layout :: head('User Management')}"></head>
+
 <body>
     <nav th:replace="~{fragments/layout :: navbar('Admin')}"></nav>
     <div class="container">
         <a class="back" th:href="@{/admin/dashboard}">← Back to dashboard</a>
-        <h1 class="page-title">User Management</h1>
-        <p class="page-sub">All registered users and their roles.</p>
+        <div class="row">
+            <div>
+                <h1 class="page-title">User Management</h1>
+                <p class="page-sub" style="margin:0;">All registered users and their roles.</p>
+            </div>
+            <a class="btn" th:href="@{/admin/users/new}">+ Add user</a>
+        </div>
+
+        <div class="error-box" th:if="${error}" th:text="${error}"></div>
+        <div th:if="${success}"
+            style="background:rgba(47,158,107,0.15); color:var(--success); padding:10px 14px; border-radius:10px; margin-bottom:16px;"
+            th:text="${success}"></div>
 
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th></tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr th:each="u : ${users}">
@@ -19,10 +37,18 @@
                         <td><b th:text="${u.name}"></b></td>
                         <td th:text="${u.email}"></td>
                         <td><span class="tag" th:text="${u.role}"></span></td>
+                        <td>
+                            <form th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post"
+                                onsubmit="return confirm('Delete this user?')">
+                                <button class="btn" type="submit"
+                                    style="padding:7px 14px; background:var(--danger);">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </body>
+
 </html>
