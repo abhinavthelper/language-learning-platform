@@ -1,6 +1,8 @@
 package com.guvi.languageplatform.controller;
 
+import com.guvi.languageplatform.model.ActivityLog;
 import com.guvi.languageplatform.model.User;
+import com.guvi.languageplatform.repository.ActivityLogRepository;
 import com.guvi.languageplatform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -11,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController {
 
     private final UserRepository userRepository;
+    private final ActivityLogRepository activityLogRepository;
 
-    public LoginController(UserRepository userRepository) {
+    public LoginController(UserRepository userRepository,
+                           ActivityLogRepository activityLogRepository) {
         this.userRepository = userRepository;
+        this.activityLogRepository = activityLogRepository;
     }
 
     @GetMapping("/")
@@ -39,12 +44,16 @@ public class LoginController {
             return "login";
         }
 
+        // Selected tab must match the role stored in the database
         if (role != null && !role.isEmpty() && !user.getRole().equals(role)) {
             model.addAttribute("error", "This is not a " + role.toLowerCase() + " account. Pick the correct tab.");
             return "login";
         }
 
         session.setAttribute("loggedUser", user);
+
+        // Save this login for admin activity monitoring
+        activityLogRepository.save(new ActivityLog(user.getEmail(), "Logged in as " + user.getRole()));
 
         if (user.getRole().equals("ADMIN")) {
             return "redirect:/admin/dashboard";
