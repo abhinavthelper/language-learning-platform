@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Content Management</title>
+</head>
+<body style="font-family: Arial; margin: 30px;">
+    <h1>Content Management</h1>
+    
+    <table border="1" cellpadding="10" cellspacing="0" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Language</th>
+                <th>Difficulty</th>
+                <th>Status</th>
+                <th>Instructor Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="l : ${lessons}">
+                <td th:text="${l.id}"></td>
+                <td th:text="${l.title}"></td>
+                <td th:text="${l.language}"></td>
+                <td th:text="${l.difficulty}"></td>
+                <td th:text="${l.status}"></td>
+                <td th:text="${l.instructorEmail}"></td>
+                <td>
+                    <form th:if="${l.status == 'PENDING'}" th:action="@{/admin/content/approve/{id}(id=${l.id})}" method="post" style="display:inline;">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <span th:if="${l.status == 'APPROVED'}">Approved</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <br/>
+    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
+</body>
+</html>
