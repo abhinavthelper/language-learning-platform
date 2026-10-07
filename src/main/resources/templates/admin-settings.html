@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>System Settings</title>
+</head>
+<body style="font-family: Arial; margin: 30px;">
+    <h1>System Settings</h1>
+    
+    <div style="margin-top: 20px; padding: 20px; border: 1px solid #ccc; max-width: 500px;">
+        <p><strong>Platform Name:</strong> Language Learning Platform</p>
+        <p><strong>Version:</strong> 1.0.0</p>
+        <p><strong>Status:</strong> Active</p>
+        <hr>
+        <p><i>More configuration options will be available soon.</i></p>
+    </div>
+    
+    <br/>
+    <a th:href="@{/admin/dashboard}">Back to Dashboard</a>
+</body>
+</html>
