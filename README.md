@@ -1,16 +1,16 @@
 # LingoLearn: Online Language Learning Platform
 
-A web application where **learners** take language lessons and quizzes, **instructors** create lessons, and **admins** manage users and approve content.
+A web application where **learners** take language lessons and quizzes, **instructors** create and manage lessons, and **admins** manage users and approve content.
 
-Built for the GUVI x HCL Java Web Based Project (Review 1).
+Built for the GUVI x HCL Java Web Based Project (Review 1 and Round 2).
 
 ## Features
 
-| Role | Working now | In progress |
-|---|---|---|
-| Learner | View approved lessons, take quizzes | Progress tracking, interactions, profile management |
-| Instructor | Create lessons (sent for approval), view own lessons and status | Feedback, learner progress, lesson analytics |
-| Admin | Approve or reject lessons, view users, view system settings | User create/edit/delete, activity monitoring |
+| Role | Features |
+|---|---|
+| Learner | View approved lessons, take quizzes, track progress, forum interactions, profile management (name, learning preference, password) |
+| Instructor | Create, edit and delete own lessons (sent for approval), give feedback, view learner progress, lesson analytics |
+| Admin | Approve or reject lessons, add, edit and delete users, edit system settings, activity monitoring |
 
 Other highlights:
 - Three-tab login (Learner / Instructor / Admin) with server-side role check
@@ -56,7 +56,7 @@ Data is stored in a local file under the `data/` folder (ignored by Git), so it 
 
 | Table | Purpose |
 |---|---|
-| `users` | Accounts with name, email, password, role |
+| `users` | Accounts with name, email, password, role, learning preference |
 | `lessons` | Lessons with content, quiz, status (PENDING / APPROVED / REJECTED), instructor |
 | `quiz_attempts` | Learner quiz results |
 | `feedback` | Instructor feedback for learners |
@@ -80,7 +80,7 @@ Two ways of accessing the database are used:
 
 ## How to Run
 
-**Requirements:** JDK 17 or higher, Git. Maven is not needed separately (the wrapper is included).
+**Requirements:** JDK 17 or higher, and Git. Maven is not needed separately (the wrapper is included).
 
 ```
 git clone https://github.com/abhinavthelper/language-learning-platform.git
@@ -88,7 +88,7 @@ cd language-learning-platform
 ./mvnw spring-boot:run
 ```
 
-On Windows PowerShell or CMD, use `mvnw spring-boot:run` if `./mvnw` does not work.
+On Windows PowerShell or CMD, use `.\mvnw spring-boot:run` if `./mvnw` does not work.
 
 Open http://localhost:8080 once the console shows `Started LanguageplatformApplication`.
 Stop the server with `Ctrl+C`. If port 8080 is busy, stop the old server first.
@@ -111,18 +111,19 @@ Pick the matching tab on the login page.
 
 | Member | GitHub | Contribution |
 |---|---|---|
-| Abhinav Verma (Team Lead) | abhinavthelper | Project setup, database models and connectivity, login and role check, UI design and theme, core Java concepts, JDBC, servlet |
-| Nishant Kumar | nishantsalar | Instructor module |
-| Abhijay Pandey | abhijaypandeygu-coder | Admin module |
-| Janhvi | janhvibhati019 | Learner module |
+| Abhinav Verma (Team Lead) | abhinavthelper | Project setup, database models and connectivity, login and role check, UI design and theme, core Java concepts, JDBC, servlet, pull request reviews and merging |
+| Nishant Kumar | nishantsalar | Instructor module (lessons, edit and delete, feedback, learner progress, analytics) |
+| Abhijay Pandey | abhijaypandeygu-coder | Admin module (content approval, user management, system settings) |
+| Janhvi | janhvibhati019 | Learner module (lessons, quizzes, progress, forum, profile) |
 
-Work was split into feature branches (`admin-module`, `instructor-module`, `learner-module`, `ui-redesign`, `phase1-base`, `db-config`) and merged into `main` through pull requests.
+Work was split into feature branches (for example `admin-module`, `instructor-module`, `learner-module`, `learner-profile`, `lesson-edit`, `admin-edit`) and merged into `main` through pull requests.
 
 ## Known Limitations and Future Work
 
 - Passwords are stored as plain text (planned: BCrypt hashing with Spring Security)
-- No route protection yet (planned: Spring Security)
+- Some admin pages check only that the user is logged in, not the exact role (planned: Spring Security route protection)
+- System settings are kept in memory and reset to defaults when the server restarts (planned: store them in a database table)
+- Email is read-only in profile and user edit, because tables are linked by email
 - Tables are linked by email, not by foreign keys (planned: proper `@ManyToOne` relations)
 - H2 is a file database for development (planned: MySQL or PostgreSQL)
-- Remaining dashboard features: progress tracking, feedback, forum, profile, analytics, activity monitoring
 - Planned: Google sign-in for learners
