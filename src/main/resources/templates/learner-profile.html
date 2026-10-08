@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My Profile')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar(${profile.name})}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/learner/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">My Profile</h1>
+        <p class="page-sub">Update your details and learning preference.</p>
+
+        <div class="error-box" th:if="${error}" th:text="${error}"></div>
+        <div th:if="${success}" style="background:rgba(47,158,107,0.15); color:var(--success); padding:10px 14px; border-radius:10px; margin-bottom:16px;" th:text="${success}"></div>
+
+        <div class="card form-card">
+            <form th:action="@{/learner/profile}" method="post">
+                <div class="field"><label>Name</label><input type="text" name="name" th:value="${profile.name}" required></div>
+                <div class="field"><label>Email (cannot be changed)</label><input type="email" th:value="${profile.email}" readonly></div>
+                <div class="field"><label>Learning preference</label>
+                    <select name="learningPreference">
+                        <option value="" th:selected="${profile.learningPreference == null}">Choose one</option>
+                        <option th:each="p : ${ {'Spanish','French','German','Casual: 10 minutes a day','Intensive: 1 hour a day'} }"
+                                th:value="${p}" th:text="${p}" th:selected="${p == profile.learningPreference}"></option>
+                    </select>
+                </div>
+                <div class="field"><label>New password (leave empty to keep the old one)</label><input type="password" name="password"></div>
+                <button class="btn" type="submit">Save profile</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
