@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('System Settings')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Admin')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/admin/dashboard}">← Back to dashboard</a>
+        <h1 class="page-title">System Settings</h1>
+        <p class="page-sub">Change platform-wide settings.</p>
+
+        <div class="error-box" th:if="${error}" th:text="${error}"></div>
+        <div th:if="${success}" style="background:rgba(47,158,107,0.15); color:var(--success); padding:10px 14px; border-radius:10px; margin-bottom:16px;" th:text="${success}"></div>
+
+        <div class="card form-card">
+            <form th:action="@{/admin/system-settings}" method="post">
+                <div class="field"><label>Platform name</label><input type="text" name="platformName" th:value="${platformName}" required></div>
+                <div class="field"><label>Status</label>
+                    <select name="status">
+                        <option th:each="s : ${ {'Active','Maintenance'} }" th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
+                    </select>
+                </div>
+                <div class="field"><label>Welcome message</label><input type="text" name="welcomeMessage" th:value="${welcomeMessage}"></div>
+                <button class="btn" type="submit">Save settings</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

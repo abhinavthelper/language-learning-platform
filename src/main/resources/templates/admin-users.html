@@ -38,11 +38,15 @@
                         <td th:text="${u.email}"></td>
                         <td><span class="tag" th:text="${u.role}"></span></td>
                         <td>
-                            <form th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post"
-                                onsubmit="return confirm('Delete this user?')">
-                                <button class="btn" type="submit"
-                                    style="padding:7px 14px; background:var(--danger);">Delete</button>
-                            </form>
+                            <div style="display:flex; gap:8px;">
+                                <a class="btn" style="padding:7px 14px;"
+                                    th:href="@{/admin/users/{id}/edit(id=${u.id})}">Edit</a>
+                                <form th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post"
+                                    onsubmit="return confirm('Delete this user?')">
+                                    <button class="btn" type="submit"
+                                        style="padding:7px 14px; background:var(--danger);">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
