@@ -13,7 +13,10 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String role;   
+    private String role;
+
+    // Profile setting chosen by the learner (e.g. Spanish, Daily 10 minutes)
+    private String learningPreference;
 
     public User() { }
 
@@ -33,4 +36,6 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public String getLearningPreference() { return learningPreference; }
+    public void setLearningPreference(String learningPreference) { this.learningPreference = learningPreference; }
 }
