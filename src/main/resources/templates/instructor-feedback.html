@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/layout :: head('Feedback')}"></head>
+  <body>
+    <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
+    <div class="container" style="max-width: 760px">
+      <a class="back" th:href="@{/instructor/dashboard}">← Back to dashboard</a>
+      <h1 class="page-title">Feedback</h1>
+      <p class="page-sub">Send feedback to a learner about their progress.</p>
+
+      <div class="error-box" th:if="${error}" th:text="${error}"></div>
+      <div
+        th:if="${success}"
+        style="
+          background: rgba(47, 158, 107, 0.15);
+          color: var(--success);
+          padding: 10px 14px;
+          border-radius: 10px;
+          margin-bottom: 16px;
+        "
+        th:text="${success}"
+      ></div>
+
+      <div class="card" style="margin-bottom: 28px">
+        <form th:action="@{/instructor/feedback}" method="post">
+          <div class="field">
+            <label>Learner</label>
+            <select name="learnerEmail">
+              <option
+                th:each="l : ${learners}"
+                th:value="${l.email}"
+                th:text="${l.name} + ' (' + ${l.email} + ')'"
+              ></option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Feedback</label
+            ><textarea name="message" rows="4" required></textarea>
+          </div>
+          <button class="btn" type="submit">Submit feedback</button>
+        </form>
+      </div>
+
+      <h3>Feedback you have given</h3>
+      <p th:if="${#lists.isEmpty(feedbackList)}">Nothing yet.</p>
+      <div class="card" th:each="f : ${feedbackList}" style="margin-top: 12px">
+        <p style="color: var(--text)" th:text="${f.message}"></p>
+        <p
+          style="font-size: 0.8rem; margin-top: 6px"
+          th:text="'To ' + ${f.learnerEmail} + ' · ' + ${#temporals.format(f.createdAt, 'dd MMM yyyy HH:mm')}"
+        ></p>
+      </div>
+    </div>
+  </body>
+</html>

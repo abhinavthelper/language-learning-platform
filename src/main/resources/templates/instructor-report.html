@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/layout :: head('Report')}"></head>
+  <body>
+    <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
+    <div class="container">
+      <a class="back" th:href="@{/instructor/dashboard}">← Back to dashboard</a>
+      <h1 class="page-title" th:text="${title}">Report</h1>
+      <p class="page-sub" th:text="${subtitle}"></p>
+
+      <div class="grid" style="margin-bottom: 28px">
+        <div class="card">
+          <h3 style="font-size: 1.8rem" th:text="${total}">0</h3>
+          <p>Total attempts</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.8rem" th:text="${correct}">0</h3>
+          <p>Correct answers</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.8rem" th:text="${percent} + '%'">0%</h3>
+          <p>Overall accuracy</p>
+        </div>
+      </div>
+
+      <p th:if="${#lists.isEmpty(stats)}">
+        No quiz attempts on your lessons yet.
+      </p>
+      <div class="table-wrap" th:unless="${#lists.isEmpty(stats)}">
+        <table>
+          <tr>
+            <th th:text="${firstColumn}">Name</th>
+            <th>Attempts</th>
+            <th>Correct</th>
+            <th style="width: 30%">Accuracy</th>
+          </tr>
+          <tr th:each="s : ${stats}">
+            <td><b th:text="${s.label}"></b></td>
+            <td th:text="${s.attempts}"></td>
+            <td th:text="${s.correct}"></td>
+            <td>
+              <div
+                style="
+                  background: var(--accent-soft);
+                  border-radius: 999px;
+                  height: 10px;
+                "
+              >
+                <div
+                  th:style="'width:' + ${s.percent} + '%; background:var(--accent); height:10px; border-radius:999px;'"
+                ></div>
+              </div>
+              <span
+                style="font-size: 0.8rem"
+                th:text="${s.percent} + '%'"
+              ></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
