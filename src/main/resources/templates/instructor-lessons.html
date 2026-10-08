@@ -1,29 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('My Lessons')}"></head>
-<body>
+  <head th:replace="~{fragments/layout :: head('My Lessons')}"></head>
+  <body>
     <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
     <div class="container">
-        <a class="back" th:href="@{/instructor/dashboard}">← Back to dashboard</a>
-        <div class="row">
-            <div>
-                <h1 class="page-title">My Lessons</h1>
-                <p class="page-sub" style="margin:0;">Lessons go live after admin approval.</p>
-            </div>
-            <a class="btn" th:href="@{/instructor/lessons/new}">+ Create lesson</a>
+      <a class="back" th:href="@{/instructor/dashboard}">← Back to dashboard</a>
+      <div class="row">
+        <div>
+          <h1 class="page-title">My Lessons</h1>
+          <p class="page-sub" style="margin: 0">
+            Lessons go live after admin approval.
+          </p>
         </div>
+        <a class="btn" th:href="@{/instructor/lessons/new}">+ Create lesson</a>
+      </div>
 
-        <div class="table-wrap">
-            <table>
-                <tr><th>Title</th><th>Language</th><th>Difficulty</th><th>Status</th></tr>
-                <tr th:each="l : ${lessons}">
-                    <td><b th:text="${l.title}"></b></td>
-                    <td><span class="tag" th:text="${l.language}"></span></td>
-                    <td th:text="${l.difficulty}"></td>
-                    <td><span class="pill" th:classappend="${#strings.toLowerCase(l.status)}" th:text="${l.status}"></span></td>
-                </tr>
-            </table>
-        </div>
+      <div
+        th:if="${success}"
+        style="
+          background: rgba(47, 158, 107, 0.15);
+          color: var(--success);
+          padding: 10px 14px;
+          border-radius: 10px;
+          margin-bottom: 16px;
+        "
+        th:text="${success}"
+      ></div>
+
+      <div class="table-wrap">
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Difficulty</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          <tr th:each="l : ${lessons}">
+            <td><b th:text="${l.title}"></b></td>
+            <td><span class="tag" th:text="${l.language}"></span></td>
+            <td th:text="${l.difficulty}"></td>
+            <td>
+              <span
+                class="pill"
+                th:classappend="${#strings.toLowerCase(l.status)}"
+                th:text="${l.status}"
+              ></span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 8px">
+                <a
+                  class="btn"
+                  style="padding: 7px 14px"
+                  th:href="@{/instructor/lessons/{id}/edit(id=${l.id})}"
+                  >Edit</a
+                >
+                <form
+                  th:action="@{/instructor/lessons/{id}/delete(id=${l.id})}"
+                  method="post"
+                  onsubmit="return confirm('Delete this lesson?');"
+                >
+                  <button
+                    class="btn"
+                    type="submit"
+                    style="padding: 7px 14px; background: var(--danger)"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{fragments/layout :: head('Edit Lesson')}"></head>
+  <body>
+    <nav th:replace="~{fragments/layout :: navbar('Instructor')}"></nav>
+    <div class="container">
+      <a class="back" th:href="@{/instructor/lessons}">← Back to my lessons</a>
+      <h1 class="page-title">Edit Lesson</h1>
+      <p class="page-sub">
+        After saving, the lesson needs admin approval again.
+      </p>
+
+      <div class="card form-card">
+        <form
+          th:action="@{/instructor/lessons/{id}/edit(id=${lesson.id})}"
+          method="post"
+        >
+          <div class="field">
+            <label>Title</label
+            ><input
+              type="text"
+              name="title"
+              th:value="${lesson.title}"
+              required
+            />
+          </div>
+          <div class="field">
+            <label>Language</label
+            ><input
+              type="text"
+              name="language"
+              th:value="${lesson.language}"
+              required
+            />
+          </div>
+          <div class="field">
+            <label>Difficulty</label>
+            <select name="difficulty">
+              <option
+                th:each="d : ${ {'Beginner','Intermediate','Advanced'} }"
+                th:value="${d}"
+                th:text="${d}"
+                th:selected="${d == lesson.difficulty}"
+              ></option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Content</label
+            ><textarea
+              name="content"
+              rows="5"
+              required
+              th:text="${lesson.content}"
+            ></textarea>
+          </div>
+          <div class="field">
+            <label>Quiz question</label
+            ><input
+              type="text"
+              name="quizQuestion"
+              th:value="${lesson.quizQuestion}"
+              required
+            />
+          </div>
+          <div class="field">
+            <label>Quiz answer</label
+            ><input
+              type="text"
+              name="quizAnswer"
+              th:value="${lesson.quizAnswer}"
+              required
+            />
+          </div>
+          <button class="btn" type="submit">Save changes</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
