@@ -1,33 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Instructor Dashboard')}"></head>
-<body>
+  <head th:replace="~{fragments/layout :: head('Instructor Dashboard')}"></head>
+  <body>
     <nav th:replace="~{fragments/layout :: navbar(${user.name})}"></nav>
     <div class="container">
-        <h1 class="page-title">Hello, <span th:text="${user.name}"></span></h1>
-        <p class="page-sub">Create lessons and track their approval.</p>
-        <div class="grid">
-            <a class="card" th:href="@{/instructor/lessons}">
-                <div class="icon">🎓</div>
-                <h3>Lesson Management</h3>
-                <p>Create lessons and see their status</p>
-            </a>
-            <div class="card disabled">
-                <div class="icon">💬</div>
-                <h3>Feedback</h3>
-                <p>Coming soon</p>
-            </div>
-            <div class="card disabled">
-                <div class="icon">📈</div>
-                <h3>Learner Progress</h3>
-                <p>Coming soon</p>
-            </div>
-            <div class="card disabled">
-                <div class="icon">📊</div>
-                <h3>Analytics</h3>
-                <p>Coming soon</p>
-            </div>
-        </div>
+      <h1 class="page-title">Hello, <span th:text="${user.name}"></span></h1>
+      <p class="page-sub">Create lessons and track their approval.</p>
+      <div class="grid">
+        <a class="card" th:href="@{/instructor/lessons}">
+          <div class="icon">🎓</div>
+          <h3>Lesson Management</h3>
+          <p>Create lessons and see their status</p>
+        </a>
+        <a class="card" th:href="@{/instructor/feedback}">
+          <div class="icon">💬</div>
+          <h3>Feedback</h3>
+          <p>Send feedback to learners</p>
+        </a>
+        <a class="card" th:href="@{/instructor/progress}">
+          <div class="icon">📈</div>
+          <h3>Learner Progress</h3>
+          <p>See how learners perform</p>
+        </a>
+        <a class="card" th:href="@{/instructor/analytics}">
+          <div class="icon">📊</div>
+          <h3>Analytics</h3>
+          <p>Lesson engagement and accuracy</p>
+        </a>
+      </div>
     </div>
-</body>
+  </body>
 </html>
