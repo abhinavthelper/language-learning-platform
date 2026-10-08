@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit User')}"></head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar('Admin')}"></nav>
+    <div class="container">
+        <a class="back" th:href="@{/admin/users}">← Back to users</a>
+        <h1 class="page-title">Edit User</h1>
+        <p class="page-sub">Change name, role or password.</p>
+
+        <div class="card form-card">
+            <form th:action="@{/admin/users/{id}/edit(id=${target.id})}" method="post">
+                <div class="field"><label>Name</label><input type="text" name="name" th:value="${target.name}" required></div>
+                <div class="field"><label>Email (cannot be changed)</label><input type="email" th:value="${target.email}" readonly></div>
+                <div class="field"><label>Role</label>
+                    <select name="role">
+                        <option th:each="r : ${ {'LEARNER','INSTRUCTOR','ADMIN'} }" th:value="${r}" th:text="${r}" th:selected="${r == target.role}"></option>
+                    </select>
+                </div>
+                <div class="field"><label>New password (leave empty to keep the old one)</label><input type="text" name="password"></div>
+                <button class="btn" type="submit">Save changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
