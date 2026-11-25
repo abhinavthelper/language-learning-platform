@@ -1,5 +1,15 @@
 package com.guvi.languageplatform.controller;
 
+import com.guvi.languageplatform.model.QuizAttempt;
+import com.guvi.languageplatform.model.User;
+import com.guvi.languageplatform.repository.QuizAttemptRepository;
+import com.guvi.languageplatform.security.CurrentUserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,24 +17,17 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import com.guvi.languageplatform.model.QuizAttempt;
-import com.guvi.languageplatform.model.User;
-import com.guvi.languageplatform.repository.QuizAttemptRepository;
-
-import jakarta.servlet.http.HttpSession;
-
 /** Learner progress table and lesson analytics, both built from quiz attempts. */
 @Controller
 public class InstructorReportsController {
 
     private final QuizAttemptRepository quizAttemptRepository;
+    private final CurrentUserService currentUserService;
 
-    public InstructorReportsController(QuizAttemptRepository quizAttemptRepository) {
+    public InstructorReportsController(QuizAttemptRepository quizAttemptRepository,
+                                       CurrentUserService currentUserService) {
         this.quizAttemptRepository = quizAttemptRepository;
+        this.currentUserService = currentUserService;
     }
 
     /** One row of a report: a label, attempts and correct answers. */
@@ -55,9 +58,10 @@ public class InstructorReportsController {
         return result;
     }
 
-    private String report(HttpSession session, Model model, String title, String subtitle,
+    private String report(HttpSession session, Authentication authentication, Model model,
+                          String title, String subtitle,
                           String firstColumn, Function<QuizAttempt, String> keyFn) {
-        User user = (User) session.getAttribute("loggedUser");
+        User user = currentUserService.getCurrentUser(session, authentication);
         if (user == null) {
             return "redirect:/login";
         }
@@ -76,14 +80,14 @@ public class InstructorReportsController {
     }
 
     @GetMapping("/instructor/progress")
-    public String learnerProgress(HttpSession session, Model model) {
-        return report(session, model, "Learner Progress",
+    public String learnerProgress(HttpSession session, Authentication authentication, Model model) {
+        return report(session, authentication, model, "Learner Progress",
                 "How each learner performs on your lessons.", "Learner", QuizAttempt::getLearnerEmail);
     }
 
     @GetMapping("/instructor/analytics")
-    public String analytics(HttpSession session, Model model) {
-        return report(session, model, "Lesson Analytics",
+    public String analytics(HttpSession session, Authentication authentication, Model model) {
+        return report(session, authentication, model, "Lesson Analytics",
                 "Engagement and performance for each of your lessons.", "Lesson", QuizAttempt::getLessonTitle);
     }
 }
