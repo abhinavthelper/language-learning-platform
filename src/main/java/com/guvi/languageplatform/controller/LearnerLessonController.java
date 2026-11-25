@@ -7,7 +7,9 @@ import com.guvi.languageplatform.model.User;
 import com.guvi.languageplatform.repository.ActivityLogRepository;
 import com.guvi.languageplatform.repository.LessonRepository;
 import com.guvi.languageplatform.repository.QuizAttemptRepository;
+import com.guvi.languageplatform.security.CurrentUserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +23,16 @@ public class LearnerLessonController {
     private final LessonRepository lessonRepository;
     private final QuizAttemptRepository quizAttemptRepository;
     private final ActivityLogRepository activityLogRepository;
+    private final CurrentUserService currentUserService;
 
     public LearnerLessonController(LessonRepository lessonRepository,
                                    QuizAttemptRepository quizAttemptRepository,
-                                   ActivityLogRepository activityLogRepository) {
+                                   ActivityLogRepository activityLogRepository,
+                                   CurrentUserService currentUserService) {
         this.lessonRepository = lessonRepository;
         this.quizAttemptRepository = quizAttemptRepository;
         this.activityLogRepository = activityLogRepository;
+        this.currentUserService = currentUserService;
     }
 
     @GetMapping("/learner/lessons")
@@ -48,15 +53,22 @@ public class LearnerLessonController {
 
     @PostMapping("/learner/lessons/{id}/quiz")
     public String checkQuiz(@PathVariable Long id, @RequestParam String answer,
-                            HttpSession session, Model model) {
+                            HttpSession session, Authentication authentication, Model model) {
         Lesson lesson = lessonRepository.findById(id).orElse(null);
         if (lesson == null || !"APPROVED".equals(lesson.getStatus())) {
             return "redirect:/learner/lessons";
         }
-        boolean correct = lesson.getQuizAnswer().trim().equalsIgnoreCase(answer.trim());
+        if (InputValidator.isBlankOrTooLong(answer, 255)) {
+            model.addAttribute("lesson", lesson);
+            model.addAttribute("result", "Please enter an answer.");
+            return "learner-lesson-detail";
+        }
+
+        boolean correct = lesson.getQuizAnswer() != null
+                && lesson.getQuizAnswer().trim().equalsIgnoreCase(answer.trim());
 
         // Save the attempt so progress, analytics and activity pages can use it
-        User user = (User) session.getAttribute("loggedUser");
+        User user = currentUserService.getCurrentUser(session, authentication);
         if (user != null) {
             quizAttemptRepository.save(new QuizAttempt(
                     user.getEmail(), lesson.getId(), lesson.getTitle(),

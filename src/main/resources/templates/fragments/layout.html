@@ -15,7 +15,9 @@
         <div class="nav-right">
             <span class="nav-user" th:text="${name}">User</span>
             <button id="themeToggle" class="icon-btn" type="button" title="Switch theme">🌙</button>
-            <a th:href="@{/logout}" class="nav-link">Logout</a>
+            <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
+                <button type="submit" class="nav-link" style="background:none; border:none; cursor:pointer; font:inherit;">Logout</button>
+            </form>
         </div>
     </nav>
 </body>

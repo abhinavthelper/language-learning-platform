@@ -1,25 +1,12 @@
 package com.guvi.languageplatform.controller;
 
-import com.guvi.languageplatform.model.ActivityLog;
-import com.guvi.languageplatform.model.User;
-import com.guvi.languageplatform.repository.ActivityLogRepository;
-import com.guvi.languageplatform.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
-
-    private final UserRepository userRepository;
-    private final ActivityLogRepository activityLogRepository;
-
-    public LoginController(UserRepository userRepository,
-                           ActivityLogRepository activityLogRepository) {
-        this.userRepository = userRepository;
-        this.activityLogRepository = activityLogRepository;
-    }
 
     @GetMapping("/")
     public String home() {
@@ -27,46 +14,12 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String showLogin() {
+    public String showLogin(HttpSession session, Model model) {
+        Object loginError = session.getAttribute("loginError");
+        if (loginError != null) {
+            model.addAttribute("error", loginError.toString());
+            session.removeAttribute("loginError");
+        }
         return "login";
-    }
-
-    @PostMapping("/login")
-    public String doLogin(@RequestParam("email") String email,
-                          @RequestParam("password") String password,
-                          @RequestParam(value = "role", required = false) String role,
-                          HttpSession session, Model model) {
-
-        User user = userRepository.findByEmail(email);
-
-        if (user == null || !user.getPassword().equals(password)) {
-            model.addAttribute("error", "Invalid email or password");
-            return "login";
-        }
-
-        // Selected tab must match the role stored in the database
-        if (role != null && !role.isEmpty() && !user.getRole().equals(role)) {
-            model.addAttribute("error", "This is not a " + role.toLowerCase() + " account. Pick the correct tab.");
-            return "login";
-        }
-
-        session.setAttribute("loggedUser", user);
-
-        // Save this login for admin activity monitoring
-        activityLogRepository.save(new ActivityLog(user.getEmail(), "Logged in as " + user.getRole()));
-
-        if (user.getRole().equals("ADMIN")) {
-            return "redirect:/admin/dashboard";
-        } else if (user.getRole().equals("INSTRUCTOR")) {
-            return "redirect:/instructor/dashboard";
-        } else {
-            return "redirect:/learner/dashboard";
-        }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
     }
 }

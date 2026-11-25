@@ -1,7 +1,6 @@
 package com.guvi.languageplatform.controller;
 
 import com.guvi.languageplatform.repository.ActivityLogRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +16,7 @@ public class AdminActivityController {
     }
 
     @GetMapping("/admin/activity")
-    public String activity(HttpSession session, Model model) {
-        if (session.getAttribute("loggedUser") == null) {
-            return "redirect:/login";
-        }
+    public String activity(Model model) {
         model.addAttribute("logs", activityLogRepository.findTop20ByOrderByCreatedAtDesc());
         return "admin-activity";
     }

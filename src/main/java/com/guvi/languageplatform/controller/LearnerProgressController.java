@@ -4,7 +4,9 @@ import com.guvi.languageplatform.model.QuizAttempt;
 import com.guvi.languageplatform.model.User;
 import com.guvi.languageplatform.repository.FeedbackRepository;
 import com.guvi.languageplatform.repository.QuizAttemptRepository;
+import com.guvi.languageplatform.security.CurrentUserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +23,14 @@ public class LearnerProgressController {
 
     private final QuizAttemptRepository quizAttemptRepository;
     private final FeedbackRepository feedbackRepository;
+    private final CurrentUserService currentUserService;
 
     public LearnerProgressController(QuizAttemptRepository quizAttemptRepository,
-                                     FeedbackRepository feedbackRepository) {
+                                     FeedbackRepository feedbackRepository,
+                                     CurrentUserService currentUserService) {
         this.quizAttemptRepository = quizAttemptRepository;
         this.feedbackRepository = feedbackRepository;
+        this.currentUserService = currentUserService;
     }
 
     /** Result numbers for one lesson (used by the bar chart on the page). */
@@ -47,8 +52,8 @@ public class LearnerProgressController {
     }
 
     @GetMapping("/learner/progress")
-    public String progress(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loggedUser");
+    public String progress(HttpSession session, Authentication authentication, Model model) {
+        User user = currentUserService.getCurrentUser(session, authentication);
         if (user == null) {
             return "redirect:/login";
         }

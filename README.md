@@ -19,7 +19,8 @@ Other highlights:
 
 ## Tech Stack
 
-- Java, Spring Boot 4.1.1 (Spring MVC)
+- Java 17, Spring Boot 4.1.1 (Spring MVC, Spring Security, Bean Validation)
+- BCrypt password hashing (`BCryptPasswordEncoder`) and CSRF protection
 - Spring Data JPA (Hibernate) and plain JDBC
 - Thymeleaf templates, HTML, CSS, JavaScript
 - H2 file database (data persists across restarts)
@@ -118,10 +119,30 @@ Pick the matching tab on the login page.
 
 Work was split into feature branches (for example `admin-module`, `instructor-module`, `learner-module`, `learner-profile`, `lesson-edit`, `admin-edit`) and merged into `main` through pull requests.
 
+## Security & Validation
+
+- **BCrypt Password Storage:** `DataInitializer`, user creation/editing, and learner profile password updates all encode passwords with `BCryptPasswordEncoder`. Legacy plaintext passwords are automatically migrated to BCrypt on startup.
+- **Role-Based Access Control (Spring Security):** `SecurityConfig` enforces `ROLE_ADMIN` on `/admin/**`, `ROLE_INSTRUCTOR` on `/instructor/**`, and `ROLE_LEARNER` on `/learner/**`. `RoleCheckingAuthenticationProvider` verifies BCrypt passwords and enforces the selected login tab.
+- **CSRF Protection:** Enabled by default across all state-changing `POST` forms (including `POST /logout` in `fragments/layout.html`).
+- **Input Validation:** Server-side validation checks user fields, system settings, lesson fields, feedback, forum messages, and quiz answers before persistence.
+
+## Reproducible Build, Test & Deployment
+
+Run the full test suite (security/CSRF integration tests, direct JDBC integration tests, and quiz/progress unit tests):
+
+```bash
+./mvnw test
+```
+
+Package the executable JAR and run it:
+
+```bash
+./mvnw clean package
+java -jar target/languageplatform-0.0.1-SNAPSHOT.jar
+```
+
 ## Known Limitations and Future Work
 
-- Passwords are stored as plain text (planned: BCrypt hashing with Spring Security)
-- Some admin pages check only that the user is logged in, not the exact role (planned: Spring Security route protection)
 - System settings are kept in memory and reset to defaults when the server restarts (planned: store them in a database table)
 - Email is read-only in profile and user edit, because tables are linked by email
 - Tables are linked by email, not by foreign keys (planned: proper `@ManyToOne` relations)
